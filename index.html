@@ -371,7 +371,121 @@
     </div>
   </section>
 
+<!-- ============================================ -->
+<!-- EXTRA FEATURE: SILENT VOWS SCROLL            -->
+<!-- Auto-typing promise with emotional weight    -->
+<!-- ============================================ -->
 
+<style>
+  .vows-section {
+    margin: 2rem 1rem;
+    padding: 1.5rem;
+    background: linear-gradient(145deg, #0f070b, #020103);
+    border-radius: 2rem;
+    border: 1px solid #c0676740;
+  }
+  .vows-scroll {
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    font-family: 'Caveat', cursive;
+    position: relative;
+  }
+  .vows-heading {
+    text-align: center;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+  }
+  .vows-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    min-height: 180px;
+    color: #f5e2e2;
+    border-left: 3px solid #c97a7a;
+    padding-left: 1rem;
+  }
+  .vows-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2rem;
+    background-color: #ffa7a7;
+    animation: blinkVow 1s infinite;
+    vertical-align: middle;
+    margin-left: 2px;
+  }
+  @keyframes blinkVow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  .reset-vow-btn {
+    background: none;
+    border: 1px solid #b66f6f;
+    border-radius: 40px;
+    padding: 6px 18px;
+    margin-top: 1rem;
+    font-size: 0.7rem;
+    color: #ffc2c2;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  @media (min-width: 768px) {
+    .vows-text { font-size: 1.3rem; }
+  }
+</style>
+
+<section class="vows-section">
+  <div class="vows-scroll">
+    <div class="vows-heading">🤍 silent vows 🤍</div>
+    <div class="vows-text" id="vowsTypingArea">
+      <span id="typedVow"></span><span class="vows-cursor"></span>
+    </div>
+    <button class="reset-vow-btn" id="resetVowBtn">read again</button>
+  </div>
+</section>
+
+<script>
+  const vowMessage = `I never wanted to become a heavy thought in your mind.<br>
+    I only wanted to be a gentle one — if you'd let me.
+    You didn't ask for my feelings. But they came anyway.
+    Not because I expected something from you.
+    But because your presence felt like home I never knew existed.
+    Even if this is where our story ends,
+    I will walk away silently — not because I stopped caring,
+    but because I respect your heart more than my own wishes.
+    You changed something inside me, Nivi.
+    And that change doesn't need your permission to exist.
+    It just does. Quietly. Gently. Forever.`;
+  const typedElement = document.getElementById('typedVow');
+  let i = 0;
+  let typingInterval;
+
+  function startTyping() {
+    if(typedElement) {
+      typedElement.innerHTML = '';
+      i = 0;
+      clearInterval(typingInterval);
+      typingInterval = setInterval(() => {
+        if(i < vowMessage.length) {
+          typedElement.innerHTML += vowMessage.charAt(i);
+          i++;
+        } else {
+          clearInterval(typingInterval);
+        }
+      }, 45);
+    }
+  }
+  
+  startTyping();
+  
+  const resetBtn = document.getElementById('resetVowBtn');
+  if(resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      startTyping();
+    });
+  }
+</script> 
 
   <!-- SECTION 6 — FINAL MESSAGE -->
   <section style="text-align: center;">
