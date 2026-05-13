@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+  <title>Eternal Echoes — A Heart's Confession</title>
+  <!-- Google Fonts + Smooth Typewriter & Handwriting -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Caveat:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 (free icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #050505;
+      font-family: 'Inter', sans-serif;
+      color: #f0eef7;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* --- custom scrollbar --- */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f0f0f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #b84c4c;
+      border-radius: 12px;
+    }
+
+    /* loading screen */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #010101;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 20px;
+      transition: opacity 1.2s ease;
+    }
+    .loader p {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      color: #ffb7b7;
+      background: rgba(20,8,8,0.4);
+      padding: 8px 20px;
+      border-radius: 40px;
+      backdrop-filter: blur(4px);
+    }
+    .heart-loader {
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, #ff3b6f, #990000);
+      clip-path: path("M12,21.35l-1.45-1.32C5.4,15.36,2,12.28,2,8.5 2,5.42,4.42,3,7.5,3c1.74,0,3.41.81,4.5,2.09C13.09,3.81,14.76,3,16.5,3 19.58,3,22,5.42,22,8.5c0,3.78-3.4,6.86-8.55,11.54L12,21.35z");
+      background: linear-gradient(135deg, #e55b5b, #a1222a);
+      animation: pulseLoader 1.4s infinite;
+      filter: drop-shadow(0 0 8px #ff8080);
+    }
+    @keyframes pulseLoader {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      100% { transform: scale(1.1); opacity: 1; }
+    }
+
+    /* Bg global */
+    .bg-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background: radial-gradient(circle at 30% 10%, #0b030a, #030000);
+      overflow: hidden;
+    }
+    .stars, .floating-hearts {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .star {
+      position: absolute;
+      background-color: white;
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: twinkle 3s infinite alternate;
+    }
+    @keyframes twinkle {
+      0% { opacity: 0.2; transform: scale(0.8);}
+      100% { opacity: 1; transform: scale(1.2);}
+    }
+    .heart-particle {
+      position: absolute;
+      font-size: 14px;
+      filter: blur(0.5px);
+      user-select: none;
+      animation: floatHeart 10s linear infinite;
+      color: #ff7b8e;
+      opacity: 0.35;
+    }
+    @keyframes floatHeart {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.5;}
+      90% { opacity: 0.4;}
+      100% { transform: translateY(-10vh) rotate(20deg); opacity: 0; }
+    }
+
+    /* glassy container */
+    .glass-card {
+      background: rgba(10, 5, 8, 0.5);
+      backdrop-filter: blur(12px);
+      border-radius: 2rem;
+      border: 1px solid rgba(255, 130, 130, 0.25);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,200,0.03);
+      transition: all 0.4s;
+    }
+
+    section {
+      padding: 5rem 1.8rem;
+      max-width: 1300px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 8vw, 4.2rem);
+      line-height: 1.2;
+      text-align: center;
+      text-shadow: 0 0 12px rgba(255,70,70,0.4);
+    }
+
+    .btn-glow {
+      background: linear-gradient(135deg, #b33b3b, #6f1a1a);
+      border: none;
+      padding: 14px 32px;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: white;
+      box-shadow: 0 0 12px #cf4a4a;
+      cursor: pointer;
+      transition: 0.25s ease;
+      font-family: 'Inter', sans-serif;
+      backdrop-filter: blur(4px);
+    }
+    .btn-glow:hover {
+      transform: scale(1.02);
+      background: linear-gradient(135deg, #c14242, #822222);
+      box-shadow: 0 0 20px #ff7575;
+    }
+
+    /* timeline cards */
+    .card-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+      margin-top: 2.5rem;
+    }
+    .reason-card {
+      background: rgba(20, 10, 12, 0.65);
+      backdrop-filter: blur(10px);
+      border-radius: 2rem;
+      padding: 1.6rem;
+      border-left: 4px solid #e66868;
+      transition: all 0.2s;
+    }
+    .reason-card i {
+      font-size: 2rem;
+      color: #ff8a8a;
+      margin-bottom: 12px;
+    }
+
+    .handwritten {
+      font-family: 'Caveat', cursive;
+      font-size: 1.6rem;
+      line-height: 1.4;
+      background: rgba(0,0,0,0.5);
+      border-radius: 2rem;
+      padding: 1rem 1.4rem;
+    }
+
+    /* typewriter effect */
+    .typewriter p {
+      overflow: hidden;
+      border-right: 2px solid #f0a3a3;
+      white-space: normal;
+      animation: blinkCursor 0.75s step-end infinite;
+    }
+    @keyframes blinkCursor {
+      from, to { border-color: transparent; }
+      50% { border-color: #ff9696; }
+    }
+
+    /* gallery carousel */
+    .carousel-container {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      display: flex;
+      gap: 1.2rem;
+      padding: 1rem 0.2rem;
+      scrollbar-width: thin;
+    }
+    .carousel-item {
+      flex: 0 0 85%;
+      scroll-snap-align: center;
+      background: #1b1215;
+      border-radius: 30px;
+      backdrop-filter: blur(6px);
+      padding: 12px 12px 24px 12px;
+      text-align: center;
+      border: 1px solid #d46b6b40;
+    }
+    .carousel-item img {
+      width: 100%;
+      border-radius: 20px;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      filter: brightness(0.85) contrast(1.1);
+      transition: 0.3s;
+    }
+
+    /* final button & music toggle */
+    .music-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 99;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 60px;
+      padding: 10px 16px;
+      border: 1px solid #b14747;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @media (min-width: 768px) {
+      section {
+        padding: 6rem 3rem;
+      }
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+      }
+      .carousel-item {
+        flex: 0 0 45%;
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+
+    .floating-glow {
+      animation: fadeGlow 2s infinite alternate;
+    }
+    @keyframes fadeGlow {
+      0% { text-shadow: 0 0 0px #ff9f9f; }
+      100% { text-shadow: 0 0 12px #ff7b7b; }
+    }
+
+    .broken-heart-animation {
+      display: flex;
+      justify-content: center;
+      font-size: 4rem;
+    }
+    .heart-fix {
+      transition: all 0.8s;
+      animation: repair 3s infinite alternate ease-in-out;
+    }
+    @keyframes repair {
+      0% { filter: drop-shadow(0 0 0px #a00); opacity: 0.5; transform: scale(0.9); }
+      100% { filter: drop-shadow(0 0 12px #f88); opacity: 1; transform: scale(1.1);}
+    }
+    i.fa-heart-crack, i.fa-heart {
+      margin: 0 4px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="loader" id="loader">
+  <div class="heart-loader"></div>
+  <p>quiet whispers of the heart ...</p>
+</div>
+
+<div class="bg-fixed">
+  <div class="stars" id="starsContainer"></div>
+  <div class="floating-hearts" id="floatingHearts"></div>
+</div>
+
+<button class="music-toggle" id="musicToggleBtn">
+  <i class="fas fa-music"></i> <span id="musicStatus">Play ♪</span>
+</button>
+<audio id="bgMusic" loop preload="auto">
+  <source src="_Enga_Vena_Poiko_Rummy_Ringtone_(by Fringster.com).mp3" type="audio/mpeg">
+</audio>
+<!--  gently emotional piano-like instrumental (royalty free mood)  -->
+
+<main>
+  <!-- Section 1 Hero -->
+  <section class="hero" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+    <div class="glass-card" style="padding: 2rem 1.5rem; max-width: 700px;">
+      <h1 style="margin-bottom: 1rem;">Some feelings are too genuine to stay unspoken…</h1>
+      <p style="font-size: 1.1rem; margin: 1.4rem 0; color: #f0cfcf;">"I didn’t create this to force you… I created this because my heart genuinely wanted you to know how much you mean to me."</p>
+      <button class="btn-glow" id="scrollBtn">Read My Heart <i class="fas fa-arrow-down"></i></button>
+    </div>
+  </section>
+
+  <!-- SECTION 2 — Why her -->
+  <section>
+    <h2 style="font-size: 2rem; text-align: center; margin-bottom: 1rem;">✨ What made you special to me?</h2>
+    <div class="card-grid">
+      <div class="reason-card"><i class="fas fa-feather-alt"></i><h3>Your essence</h3><p>It wasn’t just your beauty… It was your character, your vibe, your innocence, your way of talking, and the peace I felt while thinking about you.</p></div>
+      <div class="reason-card"><i class="fas fa-comment-dots"></i><h3>Conversations that linger</h3><p>Even small conversations with you stayed in my mind longer than they should have. Every word felt like poetry.</p></div>
+      <div class="reason-card"><i class="fas fa-moon"></i><h3>Unnoticed thoughts</h3><p>You slowly became part of my daily thoughts without me even realizing it. Like breathing — quiet yet essential.</p></div>
+    </div>
+  </section>
+
+  <!-- SECTION 3 — Trust & Fear -->
+  <section>
+    <h2 style="font-size: 1.9rem; text-align: center;">🕯️ I understand your fear.</h2>
+    <div class="glass-card" style="padding: 2rem; margin-top: 2rem;">
+      <p style="font-size: 1.1rem; line-height: 1.5;">I know trust cannot be built in one day.<br><br>Maybe my feelings came too suddenly for you… Maybe you’re scared this may not work… And honestly, I understand.<br><br>I’m not asking you to blindly trust me immediately. I just wanted one genuine chance to prove my intentions through actions.<br><br><strong>Real love isn’t built in one conversation… It’s built slowly with consistency, care, respect, and honesty.</strong></p>
+      <div class="broken-heart-animation">
+        <i class="fas fa-heart-crack heart-fix" style="font-size: 3.5rem; color:#ff8585;"></i> <i class="fas fa-heart heart-fix" style="font-size: 3rem; color:#ffb0b0; animation-delay: 0.5s;"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4 — Things I never said (Letter + typewriter) -->
+  <section>
+    <h2 style="text-align: center;">📜 Things I kept inside my heart…</h2>
+    <div style="display: flex; flex-direction: column; gap: 1.8rem; margin-top: 2rem;">
+      <div class="glass-card handwritten typewriter" style="padding: 2rem;">
+        <p id="typewriterLine">Every time you ignored my message, I acted normal… But deep inside, it hurt more than I showed.</p>
+      </div>
+      <div class="glass-card handwritten" style="padding: 1.5rem;">💔 “I never wanted to become a burden in your life.”</div>
+      <div class="glass-card handwritten" style="padding: 1.5rem;">🌙 “My intention was never to disturb your peace… I only wanted to become part of it.”</div>
+      <div class="glass-card handwritten" style="padding: 1.5rem;">✨ “Even now, after everything, I still genuinely pray for your happiness.”</div>
+      <div class="glass-card handwritten" style="padding: 1.5rem;">🍂 “I don’t hate you for saying no… Because feelings cannot be forced.”</div>
+      <div class="glass-card handwritten" style="padding: 1.5rem; font-style: italic;">“These 3 days without you were really hard for me… I couldn’t even eat properly. I skipped breakfast and lunch because my mind was completely filled with thoughts of you. I kept remembering you again and again. I cried so much that even my eyes became swollen. I really couldn’t handle it, Nivi.”</div>
+    </div>
+  </section>
+
+
+
+  <!-- SECTION 6 — FINAL MESSAGE -->
+  <section style="text-align: center;">
+    <div class="glass-card" style="padding: 2.5rem 1.5rem; background: radial-gradient(circle at center, #1d0d0f, #020101);">
+      <h2 style="font-size: 1.9rem;">💫 If destiny ever gives me a place in your heart someday… I’ll still value it.</h2>
+      <p style="margin: 2rem 0; font-size: 1.1rem; line-height: 1.6;">“I know I may not be the person you choose today… But I hope one day you’ll remember that someone genuinely loved you with a pure heart.”<br><br>“I’m not here to force your decision. If your answer is still no, I’ll respect it peacefully.”<br><br>“But if there is even a small corner in your heart asking you to think once again… Then maybe our story deserves one honest chance.”</p>
+      <button id="finalThankBtn" class="btn-glow" style="background: #5f2a2a;">Whatever your decision is… thank you for reading this. ❤️</button>
+    </div>
+  </section>
+
+  <!-- SECTION 7 — END SCREEN -->
+  <section style="min-height: 60vh; display: flex; flex-direction: column; justify-content: center;">
+    <div style="text-align: center;">
+      <h2 style="font-size: 2.3rem; font-family: 'Playfair Display';">Some people enter our hearts quietly…</h2>
+      <h2 style="font-size: 2rem; margin-top: 0.5rem;">and stay there forever.</h2>
+      <footer style="margin-top: 4rem;">Made with genuine feelings ✦</footer>
+    </div>
+  </section>
+</main>
+
+<script>
+  // ---------- loading screen ----------
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const loader = document.getElementById('loader');
+      if(loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => { loader.style.display = 'none'; }, 1200);
+      }
+    }, 1400);
+  });
+
+  // star particles + floating hearts generator
+  function createStars() {
+    const starsContainer = document.getElementById('starsContainer');
+    for(let i=0;i<180;i++) {
+      let star = document.createElement('div');
+      star.classList.add('star');
+      let size = Math.random() * 3 + 1;
+      star.style.width = size + 'px';
+      star.style.height = size + 'px';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.animationDuration = Math.random() * 3 + 2 + 's';
+      star.style.animationDelay = Math.random() * 5 + 's';
+      starsContainer.appendChild(star);
+    }
+  }
+  function createFloatingHearts() {
+    const heartsContainer = document.getElementById('floatingHearts');
+    setInterval(() => {
+      let heart = document.createElement('div');
+      heart.classList.add('heart-particle');
+      heart.innerHTML = '❤️';
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+      heart.style.animationDuration = Math.random() * 8 + 7 + 's';
+      heart.style.opacity = Math.random() * 0.45 + 0.15;
+      heartsContainer.appendChild(heart);
+      setTimeout(() => { if(heart) heart.remove(); }, 11000);
+    }, 900);
+  }
+  createStars();
+  createFloatingHearts();
+
+  // Smooth scroll to next section (section 2)
+  const scrollBtn = document.getElementById('scrollBtn');
+  if(scrollBtn) {
+    scrollBtn.addEventListener('click', () => {
+      const nextSection = document.querySelector('section:nth-of-type(2)');
+      if(nextSection) nextSection.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
+  // Final thank you button to show subtle alert (no pressure)
+  const finalBtn = document.getElementById('finalThankBtn');
+  if(finalBtn){
+    finalBtn.addEventListener('click', ()=>{
+      alert("Thank you for giving this a silent moment. I'll always respect what you feel. 💌");
+    });
+  }
+
+  // typewriter effect for first quote (more emotional)
+  const typeEl = document.getElementById('typewriterLine');
+  if(typeEl) {
+    const fullText = "Every time you ignored my message, I acted normal… But deep inside, it hurt more than I showed.";
+    let i = 0;
+    typeEl.style.borderRight = "2px solid #ff9696";
+    function typeWriter() {
+      if(i < fullText.length) {
+        typeEl.innerHTML = fullText.substring(0, i+1);
+        i++;
+        setTimeout(typeWriter, 65);
+      } else {
+        typeEl.style.borderRight = "none";
+      }
+    }
+    typeWriter();
+  }
+
+  // background music toggle button (piano-like, soft)
+  const bgAudio = document.getElementById('bgMusic');
+  const musicBtn = document.getElementById('musicToggleBtn');
+  const musicStatusSpan = document.getElementById('musicStatus');
+  let musicPlaying = false;
+  if(bgAudio) {
+    bgAudio.volume = 0.28;
+    bgAudio.loop = true;
+    // attempt autoplay? not recommended, but user clicks first
+    musicBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if(!musicPlaying) {
+        bgAudio.play().then(()=>{
+          musicPlaying = true;
+          musicStatusSpan.innerText = "On ♪";
+          musicBtn.style.background = "#a33b3b";
+        }).catch(()=>{
+          musicStatusSpan.innerText = "Tap again";
+        });
+      } else {
+        bgAudio.pause();
+        musicPlaying = false;
+        musicStatusSpan.innerText = "Play ♪";
+        musicBtn.style.background = "rgba(0,0,0,0.6)";
+      }
+    });
+  }
+
+  // gallery smooth snap carousel style minor addition: ensure that on mobile scrolling is nice
+  const carousel = document.querySelector('.carousel-container');
+  if(carousel) {
+    carousel.style.scrollBehavior = "smooth";
+  }
+  
+  // Additional floating glowcards animated entrance with intersection observer
+  const fadeElements = document.querySelectorAll('.reason-card, .glass-card, .carousel-item');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0px)';
+      } else {
+        entry.target.style.opacity = '0';
+        entry.target.style.transform = 'translateY(15px)';
+      }
+    });
+  }, { threshold: 0.1 });
+  fadeElements.forEach(el => {
+    el.style.transition = 'opacity 0.7s ease, transform 0.6s ease';
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(15px)';
+    observer.observe(el);
+  });
+
+  // extra emotional particles hover: tiny heart on button touches
+  const allBtns = document.querySelectorAll('.btn-glow');
+  allBtns.forEach(btn => {
+    btn.addEventListener('mouseenter', (e) => {
+      let ripple = document.createElement('i');
+      ripple.classList.add('fas', 'fa-heart');
+      ripple.style.position = 'absolute';
+      ripple.style.pointerEvents = 'none';
+      ripple.style.fontSize = '0.8rem';
+      ripple.style.color = '#ffb7c5';
+      ripple.style.left = e.clientX - btn.getBoundingClientRect().left + 'px';
+      ripple.style.top = '-10px';
+      ripple.style.transition = 'all 0.7s';
+      ripple.style.opacity = '0.7';
+      btn.style.position = 'relative';
+      btn.appendChild(ripple);
+      setTimeout(()=> ripple.remove(), 600);
+    });
+  });
+
+  // ensure final glass typography and broken heart continuous animation is already in CSS
+  // add additional floating particles on scroll (mini hearts) in background already w/ setInterval
+  
+  // write extra heartfelt console message - just subtle
+  console.log("%c💔 This website carries a silent prayer. Respect always.", "color:#ff9f9f; font-size:14px;");
+  
+  // add a tiny dedicated animation to trust section heart repair
+  const heartIcon = document.querySelector('.heart-fix');
+  if(heartIcon) {
+    setInterval(() => {
+      heartIcon.style.transform = 'scale(1.05)';
+      setTimeout(() => { if(heartIcon) heartIcon.style.transform = 'scale(1)'; }, 400);
+    }, 1800);
+  }
+  
+  // make sure background overlays are delicate (fix iOS glitches)
+  document.body.style.background = "#030000";
+  // lazy load final message reveal and rain effect: background gradient consistent
+  // also adaptive to any resize
+  window.dispatchEvent(new Event('resize'));
+  
+  // extra toggle to prevent accidental audio auto-block
+  document.body.addEventListener('touchstart', function initAudio() {
+    if(bgAudio && !musicPlaying && !window.audioStarted) {
+      // optional, but user will toggle anyway - not auto playing out of respect
+      window.audioStarted = true;
+    }
+  }, { once: true });
+  
+</script>
+</body>
+</html>
